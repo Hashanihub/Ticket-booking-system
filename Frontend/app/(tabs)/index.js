@@ -11,40 +11,12 @@ import {
   KeyboardAvoidingView,
   Modal,
   Platform,
-  Animated, // Added Animated
-  Easing // Added Easing
+  Animated,
+  Easing
 } from "react-native";
 
-// --- TYPE DEFINITIONS ---
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  type: "admin" | "user";
-} | null;
-
-type EventItem = {
-  id: string;
-  name: string;
-  date: string;
-  time: string;
-  location: string;
-  price: number;
-  category: string;
-  description: string;
-  image: string;
-};
-
-type CartItem = {
-  id: string;
-  event: EventItem;
-  ticketType: string;
-  quantity: number;
-  total: number;
-};
-
-// --- OFFLINE MOCK DATA ---
-const MOCK_EVENTS: EventItem[] = [
+// --- MOCK DATA ---
+const MOCK_EVENTS = [
   { 
     id: "1", 
     name: "Summer Music Festival", 
@@ -81,7 +53,7 @@ const MOCK_EVENTS: EventItem[] = [
 ];
 
 // --- ANIMATED COMPONENTS ---
-const FadeInView = ({ children, delay = 0, style }: any) => {
+const FadeInView = ({ children, delay = 0, style }) => {
   const fadeAnim = useState(new Animated.Value(0))[0];
 
   useEffect(() => {
@@ -101,7 +73,7 @@ const FadeInView = ({ children, delay = 0, style }: any) => {
   );
 };
 
-const SlideUpView = ({ children, delay = 0, style }: any) => {
+const SlideUpView = ({ children, delay = 0, style }) => {
   const slideAnim = useState(new Animated.Value(50))[0];
   const fadeAnim = useState(new Animated.Value(0))[0];
 
@@ -133,7 +105,7 @@ const SlideUpView = ({ children, delay = 0, style }: any) => {
   );
 };
 
-const BounceView = ({ children, delay = 0, style }: any) => {
+const BounceView = ({ children, delay = 0, style }) => {
   const bounceAnim = useState(new Animated.Value(0))[0];
 
   useEffect(() => {
@@ -170,33 +142,8 @@ const BounceView = ({ children, delay = 0, style }: any) => {
   );
 };
 
-// --- SIMPLE STORAGE ---
-const storage = {
-  async setItem(key: string, value: string) {
-    try {
-      if (typeof window !== 'undefined') {
-        window[key] = value;
-      }
-    } catch (error) {
-      console.log('Storage set error:', error);
-    }
-  },
-  
-  async getItem(key: string): Promise<string | null> {
-    try {
-      if (typeof window !== 'undefined') {
-        return window[key] || null;
-      }
-      return null;
-    } catch (error) {
-      console.log('Storage get error:', error);
-      return null;
-    }
-  }
-};
-
 // --- SIMPLE API SIMULATION ---
-const apiCall = async (endpoint: string, options: any = {}) => {
+const apiCall = async (endpoint, options = {}) => {
   await new Promise(resolve => setTimeout(resolve, 300));
   
   switch (endpoint) {
@@ -285,7 +232,7 @@ const apiCall = async (endpoint: string, options: any = {}) => {
 
 // --- ANIMATED SCREEN COMPONENTS ---
 
-const HomeScreen = ({ setCurrentScreen, backendConnected, testBackendConnection }: any) => (
+const HomeScreen = ({ setCurrentScreen }) => (
   <View style={styles.screenContainer}>
     <BounceView delay={200}>
       <Text style={styles.title}>🎫 Event Ticket Booking</Text>
@@ -321,7 +268,7 @@ const HomeScreen = ({ setCurrentScreen, backendConnected, testBackendConnection 
   </View>
 );
 
-const LoginScreen = ({ loginData, handleLoginChange, handleLogin, loading, setCurrentScreen }: any) => (
+const LoginScreen = ({ loginData, handleLoginChange, handleLogin, loading, setCurrentScreen }) => (
   <View style={styles.screenContainer}>
     <BounceView>
       <Text style={styles.title}>🔐 User Login</Text>
@@ -365,7 +312,7 @@ const LoginScreen = ({ loginData, handleLoginChange, handleLogin, loading, setCu
   </View>
 );
 
-const AdminLoginScreen = ({ adminLoginData, handleAdminLoginChange, handleAdminLogin, loading, setCurrentScreen }: any) => (
+const AdminLoginScreen = ({ adminLoginData, handleAdminLoginChange, handleAdminLogin, loading, setCurrentScreen }) => (
   <View style={styles.screenContainer}>
     <BounceView>
       <Text style={styles.title}>👨‍💼 Admin Login</Text>
@@ -410,7 +357,7 @@ const AdminLoginScreen = ({ adminLoginData, handleAdminLoginChange, handleAdminL
   </View>
 );
 
-const SignupScreen = ({ signupData, handleSignupChange, handleSignup, loading, setCurrentScreen }: any) => (
+const SignupScreen = ({ signupData, handleSignupChange, handleSignup, loading, setCurrentScreen }) => (
   <View style={styles.screenContainer}>
     <BounceView>
       <Text style={styles.title}>📝 Create Account</Text>
@@ -462,7 +409,7 @@ const EventEditModal = ({
   handleSaveEvent, 
   isEditing,
   loading 
-}: any) => {
+}) => {
   const [modalAnim] = useState(new Animated.Value(0));
 
   useEffect(() => {
@@ -523,7 +470,6 @@ const EventEditModal = ({
               />
             </FadeInView>
 
-            {/* Add similar FadeInView wrappers for other inputs */}
             <FadeInView delay={200}>
               <TextInput 
                 style={styles.input} 
@@ -620,7 +566,7 @@ const AdminScreen = ({
   editingEvent,
   handleUpdateEvent,
   eventLoading 
-}: any) => (
+}) => (
   <View style={styles.screenContainer}>
     <BounceView>
       <Text style={styles.title}>👨‍💼 Admin Panel</Text>
@@ -712,7 +658,7 @@ const AdminScreen = ({
   </View>
 );
 
-const EventsScreen = ({ events, user, addToCart, setCurrentScreen }: any) => (
+const EventsScreen = ({ events, user, addToCart, setCurrentScreen }) => (
   <View style={styles.screenContainer}>
     <View style={styles.eventsHeader}>
       <BounceView>
@@ -759,7 +705,7 @@ const EventsScreen = ({ events, user, addToCart, setCurrentScreen }: any) => (
   </View>
 );
 
-const CartScreen = ({ cart, handleBooking, setCurrentScreen }: any) => (
+const CartScreen = ({ cart, handleBooking, setCurrentScreen }) => (
   <View style={styles.screenContainer}>
     <BounceView>
       <Text style={styles.title}>🛒 Your Cart</Text>
@@ -789,7 +735,7 @@ const CartScreen = ({ cart, handleBooking, setCurrentScreen }: any) => (
         
         <SlideUpView delay={300}>
           <Text style={styles.totalText}>
-            Total: ${cart.reduce((sum: number, item: CartItem) => sum + item.total, 0)}
+            Total: ${cart.reduce((sum, item) => sum + item.total, 0)}
           </Text>
         </SlideUpView>
 
@@ -809,7 +755,7 @@ const CartScreen = ({ cart, handleBooking, setCurrentScreen }: any) => (
   </View>
 );
 
-const ConfirmationScreen = ({ bookingId, setCurrentScreen }: any) => (
+const ConfirmationScreen = ({ bookingId, setCurrentScreen }) => (
   <View style={styles.screenContainer}>
     <BounceView>
       <Text style={styles.title}>✅ Booking Confirmed!</Text>
@@ -841,18 +787,15 @@ const ConfirmationScreen = ({ bookingId, setCurrentScreen }: any) => (
 
 // --- MAIN APP COMPONENT ---
 export default function Index() {
-  const [currentScreen, setCurrentScreen] = useState<
-    "home" | "events" | "login" | "signup" | "admin" | "cart" | "confirmation" | "adminLogin"
-  >("home");
-  const [user, setUser] = useState<User>(null);
-  const [events, setEvents] = useState<EventItem[]>(MOCK_EVENTS);
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [currentBookingId, setCurrentBookingId] = useState<string | null>(null);
+  const [currentScreen, setCurrentScreen] = useState("home");
+  const [user, setUser] = useState(null);
+  const [events, setEvents] = useState(MOCK_EVENTS);
+  const [cart, setCart] = useState([]);
+  const [currentBookingId, setCurrentBookingId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [eventLoading, setEventLoading] = useState(false);
-  const [backendConnected, setBackendConnected] = useState(true);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-  const [editingEvent, setEditingEvent] = useState<EventItem | null>(null);
+  const [editingEvent, setEditingEvent] = useState(null);
 
   // Form states
   const [loginData, setLoginData] = useState({ email: "", password: "" });
@@ -867,7 +810,7 @@ export default function Index() {
   // Screen transition animation
   const [screenAnim] = useState(new Animated.Value(1));
 
-  const handleScreenChange = (screen: any) => {
+  const handleScreenChange = (screen) => {
     Animated.timing(screenAnim, {
       toValue: 0,
       duration: 200,
@@ -882,12 +825,6 @@ export default function Index() {
     });
   };
 
-  // Always connected in offline mode
-  const testBackendConnection = async () => {
-    setBackendConnected(true);
-    return true;
-  };
-
   const loadEvents = async () => {
     try {
       const result = await apiCall('/events');
@@ -900,27 +837,23 @@ export default function Index() {
   };
 
   useEffect(() => {
-    const initializeApp = async () => {
-      await testBackendConnection();
-      await loadEvents();
-    };
-    initializeApp();
+    loadEvents();
   }, []);
 
   // Form handlers
-  const handleLoginChange = (field: string, value: string) => {
+  const handleLoginChange = (field, value) => {
     setLoginData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleAdminLoginChange = (field: string, value: string) => {
+  const handleAdminLoginChange = (field, value) => {
     setAdminLoginData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSignupChange = (field: string, value: string) => {
+  const handleSignupChange = (field, value) => {
     setSignupData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleEventFormChange = (field: string, value: string) => {
+  const handleEventFormChange = (field, value) => {
     setEventForm(prev => ({ ...prev, [field]: value }));
   };
 
@@ -947,7 +880,7 @@ export default function Index() {
         handleScreenChange("events");
         Alert.alert("Success", "Login successful!");
       }
-    } catch (error: any) {
+    } catch (error) {
       setUser({ 
         id: "1", 
         name: "Demo User", 
@@ -983,7 +916,7 @@ export default function Index() {
       } else {
         Alert.alert("Error", "Invalid admin credentials");
       }
-    } catch (error: any) {
+    } catch (error) {
       if (adminLoginData.email === "admin@eventbook.com" && adminLoginData.password === "admin123") {
         setUser({ id: "admin1", name: "Admin", email: "admin@eventbook.com", type: "admin" });
         handleScreenChange("admin");
@@ -1024,7 +957,7 @@ export default function Index() {
         Alert.alert("Success", "Account created successfully!");
         setSignupData({ name: "", email: "", phone: "", password: "", confirmPassword: "" });
       }
-    } catch (error: any) {
+    } catch (error) {
       setUser({ 
         id: Date.now().toString(), 
         name: signupData.name, 
@@ -1070,7 +1003,7 @@ export default function Index() {
       });
       
       if (result.success && result.data) {
-        const newEvent: EventItem = {
+        const newEvent = {
           id: result.data.id.toString(), 
           ...newEventData,
           price: Number(eventForm.price)
@@ -1080,8 +1013,8 @@ export default function Index() {
         setIsEditModalVisible(false);
         Alert.alert("Success", "Event added successfully!");
       }
-    } catch (error: any) {
-      const newEvent: EventItem = { 
+    } catch (error) {
+      const newEvent = { 
         id: Date.now().toString(), 
         name: eventForm.name,
         date: eventForm.date,
@@ -1101,7 +1034,7 @@ export default function Index() {
   };
 
   // Edit event functionality
-  const editEvent = (event: EventItem) => {
+  const editEvent = (event) => {
     setEditingEvent(event);
     setEventForm({
       name: event.name,
@@ -1151,7 +1084,7 @@ export default function Index() {
         setIsEditModalVisible(false);
         Alert.alert("Success", "Event updated successfully!");
       }
-    } catch (error: any) {
+    } catch (error) {
       const updatedEvents = events.map(event => 
         event.id === editingEvent.id ? { 
           ...event, 
@@ -1174,7 +1107,7 @@ export default function Index() {
     setEventLoading(false);
   };
 
-  const deleteEvent = async (eventId: string) => {
+  const deleteEvent = async (eventId) => {
     Alert.alert(
       "Delete Event",
       "Are you sure you want to delete this event?",
@@ -1193,7 +1126,7 @@ export default function Index() {
                 setEvents(events.filter(event => event.id !== eventId));
                 Alert.alert("Success", "Event deleted successfully!");
               }
-            } catch (error: any) {
+            } catch (error) {
               setEvents(events.filter(event => event.id !== eventId));
               Alert.alert("Success", "Event deleted successfully!");
             }
@@ -1203,8 +1136,8 @@ export default function Index() {
     );
   };
 
-  const addToCart = (event: EventItem, ticketType = "regular", quantity = 1) => {
-    const cartItem: CartItem = { 
+  const addToCart = (event, ticketType = "regular", quantity = 1) => {
+    const cartItem = { 
       id: Date.now().toString(), 
       event, 
       ticketType, 
@@ -1240,7 +1173,7 @@ export default function Index() {
         handleScreenChange("confirmation");
         Alert.alert("Booking Confirmed!", `Your booking ID: ${newBookingId}`);
       }
-    } catch (error: any) {
+    } catch (error) {
       const newBookingId = Date.now().toString();
       setCurrentBookingId(newBookingId);
       setCart([]);
@@ -1252,7 +1185,7 @@ export default function Index() {
   const renderScreen = () => {
     switch (currentScreen) {
       case "home":
-        return <HomeScreen setCurrentScreen={handleScreenChange} backendConnected={backendConnected} testBackendConnection={testBackendConnection} />;
+        return <HomeScreen setCurrentScreen={handleScreenChange} />;
       case "events":
         return <EventsScreen events={events} user={user} addToCart={addToCart} setCurrentScreen={handleScreenChange} />;
       case "login":
@@ -1281,7 +1214,7 @@ export default function Index() {
       case "confirmation":
         return <ConfirmationScreen bookingId={currentBookingId} setCurrentScreen={handleScreenChange} />;
       default:
-        return <HomeScreen setCurrentScreen={handleScreenChange} backendConnected={backendConnected} testBackendConnection={testBackendConnection} />;
+        return <HomeScreen setCurrentScreen={handleScreenChange} />;
     }
   };
 
@@ -1391,9 +1324,6 @@ const styles = StyleSheet.create({
   connectedDot: { 
     color: "#34C759" 
   },
-  disconnectedDot: { 
-    color: "#FF3B30" 
-  },
   content: { 
     flex: 1 
   },
@@ -1430,21 +1360,6 @@ const styles = StyleSheet.create({
     textAlign: "center", 
     marginBottom: 8, 
     color: "#666" 
-  },
-  connectionStatus: { 
-    marginBottom: 16, 
-    alignItems: 'center' 
-  },
-  statusText: { 
-    fontSize: 14, 
-    fontWeight: "500",
-    marginBottom: 8
-  },
-  statusConnected: { 
-    color: "#34C759" 
-  },
-  statusDisconnected: { 
-    color: "#FF9500" 
   },
   sectionTitle: { 
     fontSize: 18, 
@@ -1498,18 +1413,6 @@ const styles = StyleSheet.create({
   adminButtonText: { 
     color: "#fff", 
     fontSize: 16, 
-    fontWeight: "bold" 
-  },
-  testButton: { 
-    backgroundColor: "#5856D6", 
-    padding: 10, 
-    borderRadius: 8, 
-    alignItems: "center", 
-    marginVertical: 8 
-  },
-  testButtonText: { 
-    color: "#fff", 
-    fontSize: 14, 
     fontWeight: "bold" 
   },
   input: { 
