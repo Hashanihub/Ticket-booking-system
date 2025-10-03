@@ -15,6 +15,10 @@ import {
   Easing
 } from "react-native";
 
+// Import from api.js
+import { API_BASE_URL, apiCall, testBackendConnection, saveToken } from './api.js';
+
+
 // --- MOCK DATA ---
 const MOCK_EVENTS = [
   { 
@@ -140,94 +144,6 @@ const BounceView = ({ children, delay = 0, style }) => {
       {children}
     </Animated.View>
   );
-};
-
-// --- SIMPLE API SIMULATION ---
-const apiCall = async (endpoint, options = {}) => {
-  await new Promise(resolve => setTimeout(resolve, 300));
-  
-  switch (endpoint) {
-    case '/health':
-      return { success: true, message: 'Mock server is healthy' };
-      
-    case '/events':
-      if (options.method === 'POST') {
-        const newEvent = {
-          id: Date.now().toString(),
-          ...options.body,
-          price: Number(options.body.price)
-        };
-        MOCK_EVENTS.push(newEvent);
-        return { success: true, data: newEvent };
-      }
-      if (options.method === 'PUT') {
-        const eventId = endpoint.split('/')[2];
-        const eventIndex = MOCK_EVENTS.findIndex(e => e.id === eventId);
-        if (eventIndex !== -1) {
-          MOCK_EVENTS[eventIndex] = { ...MOCK_EVENTS[eventIndex], ...options.body };
-          return { success: true, data: MOCK_EVENTS[eventIndex] };
-        }
-      }
-      if (options.method === 'DELETE') {
-        const eventId = endpoint.split('/')[2];
-        const eventIndex = MOCK_EVENTS.findIndex(e => e.id === eventId);
-        if (eventIndex !== -1) {
-          MOCK_EVENTS.splice(eventIndex, 1);
-          return { success: true };
-        }
-      }
-      return { success: true, data: MOCK_EVENTS };
-      
-    case '/auth/login':
-      const { email, password } = options.body;
-      if (email === "admin@eventbook.com" && password === "admin123") {
-        return {
-          success: true,
-          data: {
-            id: "admin1",
-            name: "Admin",
-            email: email,
-            role: "admin",
-            token: "mock-admin-token"
-          }
-        };
-      } else {
-        return {
-          success: true,
-          data: {
-            id: "1",
-            name: "Demo User",
-            email: email,
-            role: "user",
-            token: "mock-user-token"
-          }
-        };
-      }
-      
-    case '/auth/register':
-      return {
-        success: true,
-        data: {
-          id: Date.now().toString(),
-          name: options.body.name,
-          email: options.body.email,
-          role: "user",
-          token: "mock-new-user-token"
-        }
-      };
-      
-    case '/bookings':
-      return {
-        success: true,
-        data: {
-          id: Date.now().toString(),
-          bookingReference: `BK${Date.now()}`
-        }
-      };
-      
-    default:
-      return { success: true, data: null };
-  }
 };
 
 // --- ANIMATED SCREEN COMPONENTS ---
