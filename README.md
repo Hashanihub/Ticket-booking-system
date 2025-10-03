@@ -1,4 +1,4 @@
-Ticket-booking-system (backend + frontend+)
+Ticket-booking-system (backend + frontend+ Mobile)
 
 Structure:
 
