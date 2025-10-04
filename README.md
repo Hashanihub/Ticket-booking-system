@@ -32,4 +32,4 @@ Admin: admin@eventbook.com / admin123
 Notes:
 
 The backend uses simple file-based JSON storage in backend/data/
-Mobile uses 10.0.2.2 to reach host machine when using Android emulator. Change to your machine IP for physical device.
+Mobile uses 10.253.3.83 to reach host machine when using Android emulator. Change to your machine IP for physical device.
